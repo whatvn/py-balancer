@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Start httpserver daemon
+APP_NAME="httpserver"
+PYTHON="/usr/bin/python" 
+DAEMON="/usr/local/$APP_NAME"
+PID_FILE="${DAEMON}/logs/${APP_NAME}.pid" 
+
+
+[ ! -d $DAEMON ] && printf "Program is not exist\n" && exit 2
+cd $DAEMON 
+
+ARGS="${DAEMON}/${APP_NAME} --port 2000 --child-num=5"
+ 
+function _start() {
+   printf "Starting $APP_NAME...."
+   start-stop-daemon --start --background --quiet --make-pidfile --pidfile $PID_FILE --exec $PYTHON -- $ARGS
+   sleep 1
+   printf "Done.\n"
+   }
+
+function _stop() {
+   printf "Stopping $APP_NAME...."
+   start-stop-daemon --stop --quiet --pidfile  $PID_FILE 
+   if [ "$?" -eq "0" ]; then 
+      printf "Done.\n"
+   fi  
+}
+
+function _restart() {
+   _stop
+   sleep 1
+   _start
+   } 
+
+
+case "$1" in
+   start)
+      _start 
+   ;;
+   stop)
+      _stop
+   ;;
+   restart)
+      _restart 
+   ;;
+   *)
+      printf "Usage: $0 start|stop|restart\n"
+   ;;
+esac 
+
+  
+	
+
