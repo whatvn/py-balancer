@@ -10,3 +10,7 @@ Too busy to update this thing, will update later.
 But I do know you totally do not need that `how-to installation`.
 
 
+
+--
+homepage: http://blog.tinytechie.net 
+
