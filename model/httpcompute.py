@@ -144,7 +144,7 @@ class httpCompute(object):
 				# Disable logging to prevent CPU mad usage.
 				# logger.error('No server available to serve request for ' + self.request.host) 
 				last_check = last_check - 30 
-				raise tornado.web.HTTPError(502, 'No available server') 
+				return None 
 			server = self.random_weighted(servers) 
 			try:
 				counts[server] = counts[server] + 1
