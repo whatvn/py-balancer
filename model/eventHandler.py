@@ -8,10 +8,9 @@ from gevent.pool import Pool
 from gevent import socket, sleep 
 
 """
-httputil.py
+eventHandler.py
 @author: hungnv 
 @version: 1.0.0 
-core module, fork tcp server socket
 handle http request
 """
 
@@ -24,8 +23,8 @@ startTime = time.ctime()
 	
 class HTTPServer(object):
 	"""py-balancer is just a balancer node, it should not do
-	anything complicated, so all of its function is show statistic,
-	redirect to destination server, so we're trying to make it as simple
+	anything complicated, all of its function is showing statistic,
+	redirect to destination server, we're trying to make it as simple
 	as possible"""
 	
 	def send_header(self, sock, name, value = None):
