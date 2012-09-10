@@ -2,14 +2,14 @@
 # Start httpserver daemon
 APP_NAME="httpserver"
 PYTHON="/usr/bin/python" 
-DAEMON="/usr/local/$APP_NAME"
+DAEMON="/usr/local/py-balancer"
 PID_FILE="${DAEMON}/logs/${APP_NAME}.pid" 
 
 
 [ ! -d $DAEMON ] && printf "Program is not exist\n" && exit 2
 cd $DAEMON 
 
-ARGS="${DAEMON}/${APP_NAME} --port 2000 --child-num=5"
+ARGS="${DAEMON}/${APP_NAME} --port 2000 --maxt-thread=2000"
  
 function _start() {
    printf "Starting $APP_NAME...."
