@@ -9,7 +9,7 @@ PID_FILE="${DAEMON}/logs/${APP_NAME}.pid"
 [ ! -d $DAEMON ] && printf "Program is not exist\n" && exit 2
 cd $DAEMON 
 
-ARGS="${DAEMON}/${APP_NAME} --port 2000 --maxt-thread=2000"
+ARGS="${DAEMON}/${APP_NAME} --port 2000 --max-thread=2000"
  
 function _start() {
    printf "Starting $APP_NAME...."
