@@ -3,37 +3,43 @@
 """
 TCP Preforked Server, Children Call 'accept'
 
-Pool of child processes handle client requests.
+Pool of child processes force pool of threads handle client requests.
 """
 
 __author__ = 'hungnv <hungnv@opensource.com.vn>'
 
 import optparse
 from model import eventHandler, httpcompute
+from multiprocessing import Process, current_process, cpu_count
+
 
 # stores pids of all preforked children
 PIDS = []
 
 
 def main():
-	httpserver = eventHandler.HTTPServer()
-	parser = optparse.OptionParser()
-	parser.add_option(
+    httpserver = eventHandler.HTTPServer()
+    parser = optparse.OptionParser()
+    parser.add_option(
         '-i', '--host', dest='host', default='0.0.0.0',
         help='Hostname or IP address. Default is 0.0.0.0'
         )
-	parser.add_option(
+    parser.add_option(
         '-p', '--port', dest='port', type='int', default=2001,
         help='Port. Default is 2000')
-	#parser.add_option(
-    #    '-n', '--child-num', dest='childnum', type='int', default=10,
-    #    help='Number of children to prefork. Default is 10')
-	parser.add_option(
-		'-t', '--max-thread', dest='maxthread', type='int', default=1000,
-		help='MaxThread spawned to serve request, default is 1000')
-	options, args = parser.parse_args()
+    parser.add_option(
+        '-P', '--processs', dest='number_of_processes', type='int', default=cpu_count(),
+        help='Number of children to prefork. Default is 10')
+    parser.add_option(
+        '-t', '--max-thread', dest='maxthread', type='int', default=1000,
+        help='MaxThread spawned to serve request, default is 1000')
+    options, args = parser.parse_args()
 
-	httpserver.serve_forever(options.host, options.port, options.maxthread)
+    print 'Starting %s processes' % options.number_of_processes
+    listener = eventHandler.set_up_listener(options.host, options.port)
+    for i in range(options.number_of_processes):
+        Process(target=httpserver.serve_forever, args=(listener,)).start()
+    httpserver.serve_forever(listener)
 
 if __name__ == '__main__':
     main()
