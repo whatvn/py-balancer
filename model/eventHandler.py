@@ -50,7 +50,10 @@ class HTTPServer(object):
                     request_headers[element.split(':')[0]] = element.split(':')[1]
         else:
             sock.close()
-        host   = request_headers['Host'].strip()
+        if request_headers.has_key('Host'):
+            host   = request_headers['Host'].strip()
+        else:
+            sock.close()
         server = computor.computeServer(host)
         if server:
             if path == '/stats':
